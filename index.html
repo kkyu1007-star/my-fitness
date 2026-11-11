@@ -3,801 +3,409 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#101827">
-<meta name="description" content="나만의 운동 계획과 운동 기록을 관리하는 앱">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f172a">
 <title>MY FITNESS</title>
-<link rel="manifest" href="manifest.json">
 <style>
-:root {
-  --bg:#101827;
-  --panel:#1b293b;
-  --panel2:#243449;
-  --text:#f4f7fb;
-  --muted:#9aabc0;
-  --green:#43d6a0;
-  --blue:#61a9ff;
-  --line:#314258;
-  --red:#ff7272;
-}
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Arial,"Noto Sans KR",sans-serif;
-  padding-bottom:88px;
-}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-header{
-  padding:23px 19px 15px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.logo{font-size:23px;font-weight:900;letter-spacing:1px}
-.logo span{color:var(--green)}
-.sub{font-size:11px;color:var(--muted);margin-top:5px}
-.page{display:none;padding:8px 16px 24px}
+body{margin:0;background:#0f172a;color:#f1f5f9;font-family:Arial,sans-serif;padding-bottom:85px}
+header{padding:22px 16px;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:25px;margin:0;color:#fff}
+h1 span{color:#14d9ad}
+small,.muted{color:#94a3b8}
+main{padding:10px 16px}
+h2{font-size:21px;margin:20px 0 14px}
+h3{font-size:16px}
+.card{background:#1b2c40;border:1px solid #2b4057;border-radius:17px;padding:17px;margin-bottom:13px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat p{color:#94a3b8;margin:0 0 13px;font-size:14px}
+.stat strong{font-size:26px}
+button,select,input{font:inherit}
+button{border:0;border-radius:10px;padding:11px 15px;background:#14d9ad;color:#06251e;font-weight:bold;cursor:pointer}
+button.secondary{background:#30445d;color:white}
+button.danger{background:#7f3544;color:white}
+input,select{width:100%;background:#0f172a;color:white;border:1px solid #40516a;padding:12px;border-radius:9px;margin:6px 0 13px}
+label{font-size:13px;color:#aabbd0}
+nav{position:fixed;bottom:0;left:0;right:0;background:#162a40;display:flex;justify-content:space-around;padding:12px 3px;z-index:5}
+nav button{background:transparent;color:#9aadc0;padding:8px 5px;font-size:12px}
+nav button.active{color:#14d9ad}
+.page{display:none}
 .page.active{display:block}
-h2{font-size:21px;margin:12px 0 17px}
-h3{font-size:16px;margin:0 0 13px}
-.muted{color:var(--muted);font-size:13px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.card{
-  background:var(--panel);border:1px solid var(--line);
-  padding:16px;border-radius:16px;margin-bottom:12px;
-}
-.stat-label{font-size:12px;color:var(--muted)}
-.stat-value{font-size:25px;font-weight:800;margin-top:9px}
-.green{color:var(--green)}
-.blue{color:var(--blue)}
-.btn{
-  border:0;border-radius:11px;padding:12px 15px;
-  background:var(--green);color:#10251f;font-weight:800;
-}
-.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
-.btn.danger{background:#512c38;color:#ffb2b2}
-.btn.small{padding:8px 11px;font-size:12px}
-.btn.full{width:100%;margin-top:10px}
-input,select,textarea{
-  width:100%;padding:12px;background:#101c2b;
-  color:var(--text);border:1px solid var(--line);
-  border-radius:10px;margin:5px 0 12px;min-width:0;
-}
-label{font-size:12px;color:var(--muted)}
-.row{display:flex;gap:9px;align-items:center}
-.row>*{flex:1;min-width:0}
-.nav{
-  position:fixed;bottom:0;left:0;right:0;
-  display:grid;grid-template-columns:repeat(4,1fr);
-  background:#172437;border-top:1px solid var(--line);
-  padding:9px 5px calc(9px + env(safe-area-inset-bottom));
-  z-index:10;
-}
-.nav button{
-  border:0;background:none;color:var(--muted);
-  font-size:11px;padding:7px 2px;
-}
-.nav button b{display:block;font-size:20px;margin-bottom:4px}
-.nav button.active{color:var(--green)}
-.section-title{
-  display:flex;justify-content:space-between;align-items:center;
-  margin:20px 0 12px;
-}
-.item{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:10px;background:var(--panel);border:1px solid var(--line);
-  padding:13px;border-radius:12px;margin:8px 0;
-}
-.item strong{font-size:14px}
-.item small{display:block;color:var(--muted);margin-top:5px;font-size:12px}
-.pill{font-size:11px;color:var(--green);background:#174638;padding:5px 8px;border-radius:20px}
-.empty{text-align:center;color:var(--muted);padding:28px 10px;font-size:13px}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.week div{text-align:center;font-size:11px;color:var(--muted);padding:7px 0}
-.calendar{
-  display:grid;grid-template-columns:repeat(7,1fr);gap:5px;
-}
-.day{
-  min-height:57px;border:1px solid var(--line);
-  border-radius:9px;background:var(--panel);
-  text-align:center;padding:7px 1px;font-size:13px;
-}
-.day.today{border-color:var(--green)}
-.day.selected{background:#18533f;border-color:var(--green)}
-.day .dot{display:block;color:var(--green);font-size:10px;margin-top:5px}
-.day.other{opacity:.3}
-.set-row{
-  display:grid;grid-template-columns:34px 1fr 1fr 35px;
-  gap:5px;align-items:center;margin:7px 0;
-}
-.set-row input{margin:0;padding:10px 5px;text-align:center}
-.set-row span{text-align:center;color:var(--muted);font-size:12px}
-.set-row button{border:0;background:#512c38;color:#ffaaaa;border-radius:8px;padding:9px 3px}
-canvas{width:100%;height:220px;display:block}
-.chart-info{font-size:12px;color:var(--muted);margin-top:8px}
-dialog{
-  width:min(94%,480px);max-height:88vh;overflow:auto;
-  background:var(--panel);color:var(--text);
-  border:1px solid var(--line);border-radius:18px;padding:19px;
-}
-dialog::backdrop{background:#000a}
-.close-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-.close-row button{background:none;border:0;color:var(--muted);font-size:22px}
-hr{border:0;border-top:1px solid var(--line);margin:16px 0}
-.notice{background:#193b38;border-radius:12px;padding:12px;color:#a9f2d8;font-size:12px;line-height:1.6}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1}
+.exercise{background:#24384e;padding:13px;border-radius:12px;margin:10px 0}
+.setrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.setrow input{margin:4px 0}
+canvas{width:100%;height:230px;background:#14263a;border-radius:12px}
+.empty{text-align:center;color:#94a3b8;padding:25px}
+.day{display:inline-block;margin:3px;padding:9px 12px;background:#30445d;border-radius:8px;color:white}
+.day.selected{background:#14d9ad;color:#06251e}
 </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <div class="logo">MY <span>FITNESS</span></div>
-    <div class="sub">나만의 운동 계획과 성장 기록</div>
-  </div>
-  <button class="btn secondary small" onclick="backup()">백업</button>
+ <div>
+  <h1>MY <span>FITNESS</span></h1>
+  <small>나의 운동 계획과 성장 기록</small>
+ </div>
+ <button class="secondary" onclick="backup()">백업</button>
 </header>
 
-<!-- 홈 -->
+<main>
+
 <section id="home" class="page active">
-  <h2>오늘의 운동</h2>
-  <div class="cards">
-    <div class="card"><div class="stat-label">총 운동 횟수</div><div class="stat-value" id="totalSessions">0회</div></div>
-    <div class="card"><div class="stat-label">누적 운동량</div><div class="stat-value" id="totalVolume">0kg</div></div>
-    <div class="card"><div class="stat-label">총 세트 수</div><div class="stat-value" id="totalSets">0세트</div></div>
-    <div class="card"><div class="stat-label">총 운동 시간</div><div class="stat-value" id="totalMinutes">0분</div></div>
-  </div>
-  <div class="section-title"><h3>오늘 예정된 운동</h3><button class="btn small secondary" onclick="go('plan')">계획 관리</button></div>
-  <div id="todayPlan"></div>
-  <div class="section-title"><h3>최근 운동 기록</h3><button class="btn small secondary" onclick="go('stats')">통계 보기</button></div>
-  <div id="recentLogs"></div>
+ <h2>오늘의 운동</h2>
+ <div class="stats">
+  <div class="card stat"><p>오늘 운동 횟수</p><strong id="todayCount">0회</strong></div>
+  <div class="card stat"><p>오늘 세트 수</p><strong id="todaySets">0세트</strong></div>
+  <div class="card stat"><p>근력 운동</p><strong id="todayStrength">0회</strong></div>
+  <div class="card stat"><p>유산소 운동</p><strong id="todayCardio">0회</strong></div>
+ </div>
+ <h2>오늘 예정된 운동</h2>
+ <div class="card" id="todayPlan"></div>
+ <h2>최근 운동 기록</h2>
+ <div id="recent"></div>
 </section>
 
-<!-- 운동 계획 -->
-<section id="plan" class="page">
-  <h2>요일별 운동 계획</h2>
-  <p class="muted">매주 반복할 운동 종목을 요일별로 등록해 줘.</p>
-  <div id="planList"></div>
-  <button class="btn full" onclick="openPlan()">＋ 운동 종목 추가</button>
-</section>
-
-<!-- 캘린더 -->
-<section id="calendar" class="page">
-  <h2>운동 캘린더</h2>
-  <div class="card">
-    <div class="row">
-      <button class="btn secondary" onclick="changeMonth(-1)">‹</button>
-      <strong id="monthLabel" style="text-align:center"></strong>
-      <button class="btn secondary" onclick="changeMonth(1)">›</button>
-    </div>
-    <div class="week">
-      <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
-    </div>
-    <div class="calendar" id="calendarGrid"></div>
-  </div>
-  <div class="section-title"><h3 id="selectedDateLabel">선택한 날짜</h3></div>
-  <div id="dateDetails"></div>
-</section>
-
-<!-- 통계 -->
-<section id="stats" class="page">
-  <h2>운동 성장 통계</h2>
-  <div class="card">
-    <label>분석할 운동 종목</label>
-    <select id="chartExercise" onchange="drawStats()"></select>
-    <label>그래프 종류</label>
-    <select id="chartType" onchange="drawStats()">
-      <option value="weight">세트당 최고 무게 (kg)</option>
-      <option value="volume">운동량 (kg)</option>
-      <option value="reps">총 반복 횟수</option>
-    </select>
-    <canvas id="chart" width="600" height="300"></canvas>
-    <div id="chartInfo" class="chart-info">운동 기록을 추가하면 그래프가 표시돼.</div>
-  </div>
-  <div class="card">
-    <h3>운동별 누적 기록</h3>
-    <div id="exerciseStats"></div>
-  </div>
-  <div class="card">
-    <h3>데이터 관리</h3>
-    <p class="muted">기록을 파일로 저장하거나 이전 백업을 복원할 수 있어.</p>
-    <button class="btn full" onclick="backup()">기록 백업하기</button>
-    <button class="btn secondary full" onclick="document.getElementById('restoreFile').click()">백업 파일 복원하기</button>
-    <input type="file" id="restoreFile" accept=".json" hidden onchange="restoreBackup(event)">
-  </div>
-</section>
-
-<nav class="nav">
-  <button class="active" data-page="home" onclick="go('home')"><b>⌂</b>홈</button>
-  <button data-page="plan" onclick="go('plan')"><b>＋</b>운동 계획</button>
-  <button data-page="calendar" onclick="go('calendar')"><b>▦</b>캘린더</button>
-  <button data-page="stats" onclick="go('stats')"><b>▥</b>통계</button>
-</nav>
-
-<!-- 계획 입력 창 -->
-<dialog id="planDialog">
-  <div class="close-row"><h3>운동 계획 등록</h3><button onclick="closeDialog('planDialog')">×</button></div>
-  <label>운동할 요일</label>
-  <select id="planDay">
-    <option value="1">월요일</option><option value="2">화요일</option>
-    <option value="3">수요일</option><option value="4">목요일</option>
-    <option value="5">금요일</option><option value="6">토요일</option>
-    <option value="0">일요일</option>
-  </select>
+<section id="plans" class="page">
+ <h2>요일별 운동 계획</h2>
+ <p class="muted">요일을 선택하고 운동 종목을 저장해.</p>
+ <div id="days"></div>
+ <div class="card">
   <label>운동 이름</label>
   <input id="planName" placeholder="예: 체스트 프레스">
-  <label>운동 부위</label>
-  <select id="planPart">
-    <option>가슴</option><option>등</option><option>어깨</option>
-    <option>팔</option><option>하체</option><option>복근</option><option>전신</option><option>기타</option>
+  <label>운동 종류</label>
+  <select id="planType">
+   <option value="strength">근력 운동</option>
+   <option value="cardio">유산소 운동</option>
   </select>
-  <div class="row">
-    <div><label>목표 무게 (kg)</label><input id="planWeight" type="number" min="0" step="0.5" value="0"></div>
-    <div><label>목표 세트</label><input id="planSets" type="number" min="1" value="3"></div>
-    <div><label>반복 횟수</label><input id="planReps" type="number" min="1" value="10"></div>
-  </div>
-  <button class="btn full" onclick="savePlan()">계획 저장</button>
-</dialog>
+  <button onclick="addPlan()">운동 추가</button>
+ </div>
+ <div id="planList"></div>
+</section>
 
-<!-- 운동 기록 창 -->
-<dialog id="logDialog">
-  <div class="close-row"><h3>실제 운동 기록</h3><button onclick="closeDialog('logDialog')">×</button></div>
+<section id="record" class="page">
+ <h2>운동 기록하기</h2>
+ <div class="card">
   <label>운동 날짜</label>
-  <input id="logDate" type="date">
-  <label>운동 이름</label>
-  <input id="logName" placeholder="운동 이름">
-  <label>운동 시간 (분)</label>
-  <input id="logMinutes" type="number" min="0" value="0">
-  <hr>
-  <div class="section-title"><h3>세트별 기록</h3><button class="btn small secondary" onclick="addSet()">＋ 세트 추가</button></div>
-  <div class="set-row" style="color:var(--muted);font-size:11px">
-    <span>세트</span><span>무게 (kg)</span><span>횟수</span><span></span>
-  </div>
-  <div id="setRows"></div>
-  <label>메모</label>
-  <textarea id="logNote" rows="2" placeholder="운동 메모 (선택)"></textarea>
-  <button class="btn full" onclick="saveLog()">운동 기록 저장</button>
-</dialog>
+  <input type="date" id="recordDate">
+  <label>운동 종목</label>
+  <select id="recordExercise" onchange="renderRecordForm()"></select>
+  <div id="recordForm"></div>
+  <button style="width:100%" onclick="saveRecord()">운동 기록 저장</button>
+ </div>
+</section>
+
+<section id="calendar" class="page">
+ <h2>운동 기록</h2>
+ <div class="card">
+  <label>날짜 선택</label>
+  <input type="date" id="calendarDate" onchange="showDateRecords()">
+ </div>
+ <div id="calendarRecords"></div>
+</section>
+
+<section id="stats" class="page">
+ <h2>운동 통계</h2>
+ <div class="card">
+  <h3>근력 운동 그래프</h3>
+  <label>운동 종목 선택</label>
+  <select id="strengthSelect" onchange="drawStrength()"></select>
+  <p class="muted">무게 변화 (kg)</p>
+  <canvas id="strengthChart"></canvas>
+ </div>
+ <div class="card">
+  <h3>유산소 운동 그래프</h3>
+  <label>운동 종목 선택</label>
+  <select id="cardioSelect" onchange="drawCardio()"></select>
+  <p class="muted">운동 시간 (분)</p>
+  <canvas id="cardioChart"></canvas>
+ </div>
+</section>
+
+</main>
+
+<nav>
+ <button class="active" onclick="showPage('home',this)">⌂<br>홈</button>
+ <button onclick="showPage('plans',this)">＋<br>운동 계획</button>
+ <button onclick="showPage('record',this)">✎<br>운동 기록</button>
+ <button onclick="showPage('calendar',this)">▦<br>캘린더</button>
+ <button onclick="showPage('stats',this)">▥<br>통계</button>
+</nav>
 
 <script>
-const KEY="myFitnessDataV1";
-const weekdays=["일요일","월요일","화요일","수요일","목요일","금요일","토요일"];
-let data={plans:[],logs:[]};
-let selectedDate=localDate(new Date());
-let viewMonth=new Date();
+const $=id=>document.getElementById(id);
+const weekdays=['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
 
-function localDate(d){
-  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");
-  return `${y}-${m}-${day}`;
+let plans=JSON.parse(localStorage.getItem('mf_plans')||'{}');
+let records=JSON.parse(localStorage.getItem('mf_records')||'[]');
+let selectedDay=new Date().getDay();
+
+function saveData(){
+ localStorage.setItem('mf_plans',JSON.stringify(plans));
+ localStorage.setItem('mf_records',JSON.stringify(records));
 }
-function load(){
-  try{
-    const saved=JSON.parse(localStorage.getItem(KEY));
-    if(saved && Array.isArray(saved.plans)&&Array.isArray(saved.logs))data=saved;
-  }catch(e){}
+
+function today(){
+ return new Date().toLocaleDateString('en-CA');
 }
-function save(){
-  try{
-    localStorage.setItem(KEY,JSON.stringify(data));
-    render();
-  }catch(e){alert("저장 공간이 부족해. 백업 후 오래된 기록을 정리해 줘.");}
+
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ $(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+ refresh();
 }
-function go(page){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById(page).classList.add("active");
-  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
-  render();
+
+function refresh(){
+ renderHome();
+ renderPlans();
+ renderExerciseOptions();
+ renderStats();
 }
-function closeDialog(id){document.getElementById(id).close()}
-function openPlan(){
-  document.getElementById("planName").value="";
-  document.getElementById("planWeight").value=0;
-  document.getElementById("planSets").value=3;
-  document.getElementById("planReps").value=10;
-  document.getElementById("planDay").value=String(new Date().getDay());
-  document.getElementById("planDialog").showModal();
-}
-function savePlan(){
-  const name=document.getElementById("planName").value.trim();
-  const weight=Number(document.getElementById("planWeight").value);
-  const sets=Number(document.getElementById("planSets").value);
-  const reps=Number(document.getElementById("planReps").value);
-  if(!name||weight<0||sets<1||reps<1){alert("운동 이름과 올바른 숫자를 입력해 줘.");return;}
-  data.plans.push({
-    id:crypto.randomUUID(),day:Number(document.getElementById("planDay").value),
-    name,part:document.getElementById("planPart").value,weight,sets,reps
-  });
-  closeDialog("planDialog");save();
-}
-function deletePlan(id){
-  if(confirm("이 운동 계획을 삭제할까?")){
-    data.plans=data.plans.filter(p=>p.id!==id);save();
-  }
-}
-function openLog(name="",date=selectedDate){
-  document.getElementById("logDate").value=date;
-  document.getElementById("logName").value=name;
-  document.getElementById("logMinutes").value=0;
-  document.getElementById("logNote").value="";
-  document.getElementById("setRows").innerHTML="";
-  addSet();addSet();addSet();
-  document.getElementById("logDialog").showModal();
-}
-function addSet(weight="",reps=""){
-  const box=document.createElement("div");
-  box.className="set-row";
-  box.innerHTML=`<span class="set-number"></span>
-    <input type="number" min="0" step="0.5" placeholder="kg" value="${weight}">
-    <input type="number" min="1" placeholder="회" value="${reps}">
-    <button type="button" onclick="this.parentElement.remove();numberSets()">×</button>`;
-  document.getElementById("setRows").appendChild(box);numberSets();
-}
-function numberSets(){
-  document.querySelectorAll("#setRows .set-row").forEach((r,i)=>r.querySelector(".set-number").textContent=i+1);
-}
-function saveLog(){
-  const name=document.getElementById("logName").value.trim();
-  const date=document.getElementById("logDate").value;
-  const sets=[...document.querySelectorAll("#setRows .set-row")].map(r=>({
-    weight:Number(r.children[1].value),reps:Number(r.children[2].value)
-  }));
-  if(!name||!date||!sets.length||sets.some(s=>!Number.isFinite(s.weight)||s.weight<0||!Number.isInteger(s.reps)||s.reps<1)){
-    alert("운동 이름, 날짜, 각 세트의 무게와 반복 횟수를 확인해 줘.");return;
-  }
-  data.logs.push({
-    id:crypto.randomUUID(),name,date,
-    minutes:Math.max(0,Number(document.getElementById("logMinutes").value)||0),
-    sets,note:document.getElementById("logNote").value.trim()
-  });
-  selectedDate=date;
-  closeDialog("logDialog");save();
-}
-function deleteLog(id){
-  if(confirm("이 운동 기록을 삭제할까?")){
-    data.logs=data.logs.filter(x=>x.id!==id);save();
-  }
-}
-function volume(log){return log.sets.reduce((s,x)=>s+x.weight*x.reps,0)}
-function logCard(log){
-  const best=Math.max(...log.sets.map(s=>s.weight));
-  const totalReps=log.sets.reduce((s,x)=>s+x.reps,0);
-  return `<div class="item"><div><strong>${esc(log.name)}</strong>
-    <small>${log.date} · ${log.sets.length}세트 · ${totalReps}회</small>
-    <small>최고 ${best}kg · 운동량 ${volume(log).toLocaleString()}kg</small>
-    </div><button class="btn danger small" onclick="deleteLog('${log.id}')">삭제</button></div>`;
-}
-function esc(s){
-  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
+
 function renderHome(){
-  const totalSets=data.logs.reduce((s,l)=>s+l.sets.length,0);
-  const totalVolume=data.logs.reduce((s,l)=>s+volume(l),0);
-  const totalMinutes=data.logs.reduce((s,l)=>s+l.minutes,0);
-  document.getElementById("totalSessions").textContent=data.logs.length+"회";
-  document.getElementById("totalVolume").textContent=Math.round(totalVolume).toLocaleString()+"kg";
-  document.getElementById("totalSets").textContent=totalSets+"세트";
-  document.getElementById("totalMinutes").textContent=totalMinutes+"분";
-  const today=localDate(new Date());
-  const plans=data.plans.filter(p=>p.day===new Date().getDay());
-  document.getElementById("todayPlan").innerHTML=plans.length?
-    plans.map(p=>`<div class="item"><div><strong>${esc(p.name)}</strong><small>${esc(p.part)} · 목표 ${p.weight}kg · ${p.sets}세트 × ${p.reps}회</small></div><button class="btn small" onclick="openLog('${esc(p.name)}','${today}')">기록</button></div>`).join("")
-    :'<div class="empty">오늘 등록된 운동 계획이 없어.</div>';
-  const recent=[...data.logs].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);
-  document.getElementById("recentLogs").innerHTML=recent.length?recent.map(logCard).join(""):'<div class="empty">아직 운동 기록이 없어.</div>';
+ let t=today();
+ let r=records.filter(x=>x.date===t);
+ $('todayCount').textContent=r.length+'회';
+ $('todaySets').textContent=r.reduce((a,x)=>a+x.sets,0)+'세트';
+ $('todayStrength').textContent=r.filter(x=>x.type==='strength').length+'회';
+ $('todayCardio').textContent=r.filter(x=>x.type==='cardio').length+'회';
+
+ let p=plans[new Date().getDay()]||[];
+ $('todayPlan').innerHTML=p.length?p.map(x=>
+  `<div class="exercise">${esc(x.name)} · ${x.type==='strength'?'근력':'유산소'}</div>`
+ ).join(''):'<div class="empty">오늘 등록된 운동 계획이 없어.</div>';
+
+ $('recent').innerHTML=records.slice().reverse().slice(0,5).map(recordHTML).join('')
+ ||'<div class="empty">아직 운동 기록이 없어.</div>';
 }
+
+function renderDays(){
+ $('days').innerHTML=weekdays.map((d,i)=>
+ `<button class="${i===selectedDay?'day selected':'day'}" onclick="selectDay(${i})">${d.slice(0,1)}</button>`
+ ).join('');
+}
+
+function selectDay(d){
+ selectedDay=d;
+ renderPlans();
+}
+
 function renderPlans(){
-  document.getElementById("planList").innerHTML=weekdays.map((day,i)=>{
-    const list=data.plans.filter(p=>p.day===i);
-    return `<div class="card"><div class="section-title"><h3>${day}</h3><button class="btn small secondary" onclick="openPlanDay(${i})">＋ 추가</button></div>
-    ${list.length?list.map(p=>`<div class="item"><div><strong>${esc(p.name)}</strong><small>${esc(p.part)} · ${p.weight}kg · ${p.sets}세트 × ${p.reps}회</small></div><button class="btn danger small" onclick="deletePlan('${p.id}')">삭제</button></div>`).join(""):'<div class="muted">등록된 운동이 없어.</div>'}</div>`;
-  }).join("");
+ renderDays();
+ let p=plans[selectedDay]||[];
+ $('planList').innerHTML='<h3>'+weekdays[selectedDay]+' 운동</h3>'+
+ (p.length?p.map((x,i)=>`
+ <div class="card row">
+ <div><b>${esc(x.name)}</b><br><small>${x.type==='strength'?'근력 운동':'유산소 운동'}</small></div>
+ <button class="danger" onclick="deletePlan(${i})">삭제</button>
+ </div>`).join(''):'<div class="empty">등록된 운동이 없어.</div>');
 }
-function openPlanDay(day){
-  openPlan();document.getElementById("planDay").value=String(day);
+
+function addPlan(){
+ let name=$('planName').value.trim();
+ if(!name)return alert('운동 이름을 입력해줘.');
+ if(!plans[selectedDay])plans[selectedDay]=[];
+ plans[selectedDay].push({name,type:$('planType').value});
+ $('planName').value='';
+ saveData();refresh();
 }
-function changeMonth(n){
-  viewMonth=new Date(viewMonth.getFullYear(),viewMonth.getMonth()+n,1);renderCalendar();
+
+function deletePlan(i){
+ plans[selectedDay].splice(i,1);
+ saveData();refresh();
 }
-function renderCalendar(){
-  const y=viewMonth.getFullYear(),m=viewMonth.getMonth();
-  document.getElementById("monthLabel").textContent=`${y}년 ${m+1}월`;
-  const first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();
-  const prev=new Date(y,m,0).getDate();
-  let html="";
-  for(let i=0;i<42;i++){
-    let day=i-first+1,other=false,actual;
-    if(day<1){actual=prev+day;other=true}
-    else if(day>days){actual=day-days;other=true}
-    else actual=day;
-    const date=localDate(new Date(y,m+(day<1?-1:day>days?1:0),actual));
-    const has=data.logs.some(l=>l.date===date);
-    const planned=data.plans.some(p=>p.day===new Date(date+"T12:00:00").getDay());
-    html+=`<button class="day ${other?"other":""} ${date===localDate(new Date())?"today":""} ${date===selectedDate?"selected":""}" onclick="selectDate('${date}')">${actual}${has||planned?'<span class="dot">'+(has?'●':'·')+'</span>':''}</button>`;
-  }
-  document.getElementById("calendarGrid").innerHTML=html;
-  renderDateDetails();
+
+function allExercises(){
+ let list=[];
+ Object.values(plans).forEach(a=>list.push(...a));
+ records.forEach(r=>list.push({name:r.name,type:r.type}));
+ let map={};
+ list.forEach(x=>map[x.name+'_'+x.type]=x);
+ return Object.values(map);
 }
-function selectDate(date){selectedDate=date;renderCalendar()}
-function renderDateDetails(){
-  const date=selectedDate;
-  document.getElementById("selectedDateLabel").textContent=date;
-  const day=new Date(date+"T12:00:00").getDay();
-  const plans=data.plans.filter(p=>p.day===day);
-  const logs=data.logs.filter(l=>l.date===date);
-  let html="";
-  if(plans.length){
-    html+='<p class="muted">예정된 운동</p>'+plans.map(p=>`<div class="item"><div><strong>${esc(p.name)}</strong><small>${p.weight}kg · ${p.sets}세트 × ${p.reps}회</small></div><button class="btn small" onclick="openLog('${esc(p.name)}','${date}')">기록하기</button></div>`).join("");
-  }
-  if(logs.length){
-    html+='<p class="muted" style="margin-top:18px">실제 운동 기록</p>'+logs.map(logCard).join("");
-  }
-  html+='<button class="btn full" onclick="openLog(\'\',\''+date+'\')">＋ 다른 운동 기록하기</button>';
-  document.getElementById("dateDetails").innerHTML=html;
+
+function renderExerciseOptions(){
+ let all=allExercises();
+ let select=$('recordExercise');
+ let old=select.value;
+ select.innerHTML=all.map(x=>
+ `<option value="${esc(x.name)}|${x.type}">${esc(x.name)} (${x.type==='strength'?'근력':'유산소'})</option>`
+ ).join('');
+ if(old)select.value=old;
+ renderRecordForm();
 }
+
+function renderRecordForm(){
+ let val=$('recordExercise').value;
+ if(!val){$('recordForm').innerHTML='<p class="muted">먼저 운동 계획에서 종목을 추가해줘.</p>';return;}
+ let [name,type]=val.split('|');
+ if(type==='cardio'){
+  $('recordForm').innerHTML=`
+  <label>운동 단계</label>
+  <input id="level" type="number" min="1" max="100" placeholder="예: 5">
+  <label>운동 시간 (분)</label>
+  <input id="minutes" type="number" min="1" placeholder="예: 30">
+  <p class="muted">유산소 운동은 세트 1개로 자동 기록돼.</p>`;
+ }else{
+  $('recordForm').innerHTML=`
+  <label>무게 (kg)</label>
+  <input id="weight" type="number" min="0" step="0.5" placeholder="예: 50">
+  <label>세트 수</label>
+  <input id="setCount" type="number" min="1" max="30" value="3" onchange="renderSetInputs()">
+  <div id="setInputs"></div>`;
+  renderSetInputs();
+ }
+}
+
+function renderSetInputs(){
+ let n=Math.max(1,Math.min(30,Number($('setCount').value)||1));
+ $('setInputs').innerHTML='<label>세트별 반복 횟수</label>'+
+ Array.from({length:n},(_,i)=>`
+ <div class="setrow">
+ <label>세트 ${i+1}</label>
+ <input class="reps" type="number" min="1" placeholder="반복 횟수">
+ </div>`).join('');
+}
+
+function saveRecord(){
+ let val=$('recordExercise').value;
+ if(!val)return alert('운동 종목을 먼저 추가해줘.');
+ let [name,type]=val.split('|');
+ let r={date:$('recordDate').value||today(),name,type,sets:1};
+
+ if(type==='strength'){
+  let weight=Number($('weight').value);
+  let reps=[...document.querySelectorAll('.reps')].map(x=>Number(x.value));
+  if(!Number.isFinite(weight)||weight<0||reps.some(x=>!Number.isInteger(x)||x<1))
+   return alert('무게와 모든 세트의 반복 횟수를 입력해줘.');
+  r.weight=weight;
+  r.reps=reps;
+  r.sets=reps.length;
+ }else{
+  let level=Number($('level').value);
+  let minutes=Number($('minutes').value);
+  if(!Number.isInteger(level)||level<1||!Number.isFinite(minutes)||minutes<=0)
+   return alert('단계와 운동 시간을 올바르게 입력해줘.');
+  r.level=level;
+  r.minutes=minutes;
+  r.sets=1;
+ }
+ records.push(r);
+ saveData();refresh();
+ alert('운동 기록을 저장했어!');
+}
+
+function recordHTML(r){
+ return `<div class="card">
+ <b>${esc(r.name)}</b> <small>${r.date}</small><br>
+ ${r.type==='strength'
+ ? `${r.weight}kg · ${r.sets}세트 · ${r.reps.join(' / ')}회`
+ : `단계 ${r.level} · ${r.minutes}분 · 1세트`}
+ </div>`;
+}
+
+function showDateRecords(){
+ let d=$('calendarDate').value;
+ let r=records.filter(x=>x.date===d);
+ $('calendarRecords').innerHTML=r.map(recordHTML).join('')
+ ||'<div class="empty">해당 날짜의 기록이 없어.</div>';
+}
+
 function renderStats(){
-  const names=[...new Set(data.logs.map(l=>l.name))].sort();
-  const select=document.getElementById("chartExercise"),old=select.value;
-  select.innerHTML='<option value="">운동 종목 선택</option>'+names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
-  if(names.includes(old))select.value=old;
-  document.getElementById("exerciseStats").innerHTML=names.length?names.map(name=>{
-    const logs=data.logs.filter(l=>l.name===name);
-    const best=Math.max(...logs.flatMap(l=>l.sets.map(s=>s.weight)));
-    const total=logs.reduce((s,l)=>s+volume(l),0);
-    return `<div class="item"><div><strong>${esc(name)}</strong><small>${logs.length}회 기록 · 최고 ${best}kg · 누적 ${Math.round(total).toLocaleString()}kg</small></div></div>`;
-  }).join(""):'<div class="empty">운동 기록이 쌓이면 여기에 표시돼.</div>';
-  drawStats();
+ let all=allExercises();
+ let strength=all.filter(x=>x.type==='strength');
+ let cardio=all.filter(x=>x.type==='cardio');
+
+ function fill(id,items){
+  let old=$(id).value;
+  $(id).innerHTML=items.map(x=>
+   `<option value="${esc(x.name)}">${esc(x.name)}</option>`
+  ).join('');
+  if(old)$(id).value=old;
+ }
+ fill('strengthSelect',strength);
+ fill('cardioSelect',cardio);
+ drawStrength();drawCardio();
 }
-function drawStats(){
-  const canvas=document.getElementById("chart"),ctx=canvas.getContext("2d");
-  const name=document.getElementById("chartExercise").value;
-  const type=document.getElementById("chartType").value;
-  const logs=data.logs.filter(l=>l.name===name).sort((a,b)=>a.date.localeCompare(b.date));
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(!logs.length){
-    document.getElementById("chartInfo").textContent="운동 종목을 선택하고 기록을 추가하면 그래프가 표시돼.";
-    return;
-  }
-  const points=logs.map(l=>{
-    let value=type==="weight"?Math.max(...l.sets.map(s=>s.weight)):
-      type==="reps"?l.sets.reduce((s,x)=>s+x.reps,0):volume(l);
-    return {date:l.date,value};
-  });
-  const max=Math.max(1,...points.map(p=>p.value))*1.2;
-  const left=48,right=canvas.width-18,top=22,bottom=canvas.height-42;
-  ctx.strokeStyle="#314258";ctx.lineWidth=1;
-  for(let i=0;i<=4;i++){
-    const y=bottom-(bottom-top)*i/4;
-    ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(right,y);ctx.stroke();
-    ctx.fillStyle="#9aabc0";ctx.font="12px Arial";ctx.textAlign="right";
-    ctx.fillText((max*i/4).toFixed(0),left-8,y+4);
-  }
-  const coords=points.map((p,i)=>({
-    x:points.length===1?(left+right)/2:left+(right-left)*i/(points.length-1),
-    y:bottom-(bottom-top)*p.value/max
-  }));
-  ctx.strokeStyle="#43d6a0";ctx.lineWidth=3;ctx.beginPath();
-  coords.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
-  ctx.stroke();
-  coords.forEach((p,i)=>{
-    ctx.fillStyle="#43d6a0";ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle="#f4f7fb";ctx.font="11px Arial";ctx.textAlign="center";
-    if(points.length<=8||i===0||i===points.length-1)ctx.fillText(points[i].date.slice(5),p.x,bottom+20);
-  });
-  document.getElementById("chartInfo").textContent=`${points.length}회 기록 · 최근 값 ${points[points.length-1].value.toFixed(1)}${type==="weight"?"kg":type==="volume"?"kg":"회"}`;
+
+function drawChart(id,data,color){
+ let c=$(id),ctx=c.getContext('2d');
+ let w=c.clientWidth,h=230,dpr=window.devicePixelRatio||1;
+ c.width=w*dpr;c.height=h*dpr;
+ ctx.scale(dpr,dpr);
+ ctx.clearRect(0,0,w,h);
+ if(!data.length){
+  ctx.fillStyle='#94a3b8';ctx.textAlign='center';
+  ctx.fillText('아직 기록이 없어',w/2,h/2);
+  return;
+ }
+ let values=data.map(x=>x.value);
+ let max=Math.max(...values,1);
+ let left=35,right=12,top=20,bottom=35;
+ let cw=w-left-right,ch=h-top-bottom;
+ ctx.strokeStyle='#40516a';ctx.lineWidth=1;
+ for(let i=0;i<5;i++){
+  let y=top+ch*i/4;
+  ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();
+ }
+ let points=data.map((x,i)=>({
+  x:left+(data.length===1?cw/2:cw*i/(data.length-1)),
+  y:top+ch-(x.value/max)*ch
+ }));
+ ctx.strokeStyle=color;ctx.lineWidth=3;ctx.beginPath();
+ points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+ ctx.stroke();
+ points.forEach((p,i)=>{
+  ctx.fillStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#94a3b8';ctx.font='10px Arial';ctx.textAlign='center';
+  ctx.fillText(data[i].date.slice(5),p.x,h-12);
+ });
 }
-function render(){
-  renderHome();renderPlans();renderCalendar();renderStats();
+
+function drawStrength(){
+ let name=$('strengthSelect').value;
+ let data=records.filter(x=>x.type==='strength'&&x.name===name)
+ .sort((a,b)=>a.date.localeCompare(b.date))
+ .map(x=>({date:x.date,value:x.weight}));
+ drawChart('strengthChart',data,'#14d9ad');
 }
+
+function drawCardio(){
+ let name=$('cardioSelect').value;
+ let data=records.filter(x=>x.type==='cardio'&&x.name===name)
+ .sort((a,b)=>a.date.localeCompare(b.date))
+ .map(x=>({date:x.date,value:x.minutes}));
+ drawChart('cardioChart',data,'#60a5fa');
+}
+
+function esc(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+ '&':'&amp;','<':'&lt;','>':'&gt;',
+ '"':'&quot;',"'":'&#39;'
+ })[c]);
+}
+
 function backup(){
-  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-  const url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="my-fitness-backup.json";a.click();
-  URL.revokeObjectURL(url);
+ let blob=new Blob([JSON.stringify({plans,records},null,2)],{type:'application/json'});
+ let a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download='my-fitness-backup.json';
+ a.click();
+ URL.revokeObjectURL(a.href);
 }
-function restoreBackup(event){
-  const file=event.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=()=>{
-    try{
-      const d=JSON.parse(reader.result);
-      if(!Array.isArray(d.plans)||!Array.isArray(d.logs))throw Error();
-      if(confirm("현재 기록을 백업 파일의 내용으로 교체할까?")){
-        data=d;save();alert("백업 복원이 완료됐어.");
-      }
-    }catch(e){alert("올바른 운동 백업 파일이 아니야.");}
-    event.target.value="";
-  };
-  reader.readAsText(file);
-}
-load();render();
-if("serviceWorker" in navigator && location.protocol.startsWith("http")){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-}
+
+$('recordDate').value=today();
+$('calendarDate').value=today();
+refresh();
+showDateRecords();
+
+window.addEventListener('resize',()=>{
+ if($('stats').classList.contains('active'))renderStats();
+});
 </script>
 </body>
-  
-<style>
-/* 누적 운동량과 운동 시간 카드 제거 */
-#totalVolume, #totalMinutes {
-  display: none !important;
-}
-#planDialog .row {
-  display: none;
-}
-.set-detail {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.8;
-  margin-top: 7px;
-}
-</style>
-
-<script>
-// 홈 화면: 오늘 기록만 표시
-function renderHome() {
-  const today = localDate(new Date());
-  const logs = data.logs.filter(l => l.date === today);
-  const sets = logs.reduce((n,l) => n + l.sets.length, 0);
-
-  document.querySelector('#totalSessions')
-    .previousElementSibling.textContent = '오늘 운동 종목';
-  document.querySelector('#totalSets')
-    .previousElementSibling.textContent = '오늘 완료 세트';
-
-  document.getElementById('totalSessions').textContent =
-    logs.length + '종목';
-  document.getElementById('totalSets').textContent =
-    sets + '세트';
-
-  document.getElementById('totalVolume').parentElement.style.display = 'none';
-  document.getElementById('totalMinutes').parentElement.style.display = 'none';
-
-  const plans = data.plans.filter(p =>
-    p.day === new Date().getDay()
-  );
-
-  document.getElementById('todayPlan').innerHTML = plans.length
-    ? plans.map(p => `
-      <div class="item">
-        <div>
-          <strong>${esc(p.name)}</strong>
-          <small>${esc(p.part)}</small>
-        </div>
-        <button class="btn small" onclick="openLog('${esc(p.name)}','${today}')">
-          기록
-        </button>
-      </div>`).join('')
-    : '<div class="empty">오늘 예정된 운동이 없어.</div>';
-
-  const recent = [...logs].reverse();
-  document.getElementById('recentLogs').innerHTML =
-    recent.length ? recent.map(logCard).join('') :
-    '<div class="empty">오늘 운동 기록이 없어.</div>';
-}
-
-// 요일별 계획 등록: 운동 이름과 부위만 저장
-function openPlan() {
-  document.getElementById('planName').value = '';
-  document.getElementById('planDay').value =
-    String(new Date().getDay());
-  document.getElementById('planDialog').showModal();
-}
-
-function savePlan() {
-  const name = document.getElementById('planName').value.trim();
-  if (!name) {
-    alert('운동 이름을 입력해 줘.');
-    return;
-  }
-
-  data.plans.push({
-    id: crypto.randomUUID(),
-    day: Number(document.getElementById('planDay').value),
-    name,
-    part: document.getElementById('planPart').value,
-    weight: 0,
-    sets: 3,
-    reps: 10
-  });
-
-  closeDialog('planDialog');
-  save();
-}
-
-// 요일별 계획 표시
-function renderPlans() {
-  document.getElementById('planList').innerHTML =
-    weekdays.map((day,i) => {
-      const list = data.plans.filter(p => p.day === i);
-      return `
-        <div class="card">
-          <div class="section-title">
-            <h3>${day}</h3>
-            <button class="btn small secondary"
-              onclick="openPlanDay(${i})">＋ 추가</button>
-          </div>
-          ${list.length ? list.map(p => `
-            <div class="item">
-              <div>
-                <strong>${esc(p.name)}</strong>
-                <small>${esc(p.part)}</small>
-              </div>
-              <button class="btn danger small"
-                onclick="deletePlan('${p.id}')">삭제</button>
-            </div>
-          `).join('') :
-          '<div class="muted">등록된 운동이 없어.</div>'}
-        </div>`;
-    }).join('');
-}
-
-// 운동 기록 표시: 세트별 무게와 횟수
-function logCard(log) {
-  const details = log.sets.map((s,i) =>
-    `${i+1}세트: ${s.weight}kg × ${s.reps}회`
-  ).join('<br>');
-
-  return `
-    <div class="item">
-      <div>
-        <strong>${esc(log.name)}</strong>
-        <small>${log.date} · ${log.sets.length}세트</small>
-        <div class="set-detail">${details}</div>
-      </div>
-      <button class="btn danger small"
-        onclick="deleteLog('${log.id}')">삭제</button>
-    </div>`;
-}
-
-// 캘린더에서 세트별 기록 표시
-function renderDateDetails() {
-  const date = selectedDate;
-  document.getElementById('selectedDateLabel').textContent = date;
-
-  const day = new Date(date + 'T12:00:00').getDay();
-  const plans = data.plans.filter(p => p.day === day);
-  const logs = data.logs.filter(l => l.date === date);
-
-  let html = '';
-
-  if (plans.length) {
-    html += '<p class="muted">예정된 운동</p>';
-    html += plans.map(p => `
-      <div class="item">
-        <strong>${esc(p.name)}</strong>
-        <button class="btn small"
-          onclick="openLog('${esc(p.name)}','${date}')">
-          기록하기
-        </button>
-      </div>`).join('');
-  }
-
-  if (logs.length) {
-    html += '<p class="muted">실제 운동 기록</p>';
-    html += logs.map(logCard).join('');
-  }
-
-  html += `<button class="btn full"
-    onclick="openLog('','${date}')">＋ 다른 운동 기록하기</button>`;
-
-  document.getElementById('dateDetails').innerHTML = html;
-}
-
-// 통계: 누적 운동량 없이 운동별 기록
-function renderStats() {
-  const names = [...new Set(data.logs.map(l => l.name))].sort();
-  const select = document.getElementById('chartExercise');
-  const old = select.value;
-
-  select.innerHTML =
-    '<option value="">운동 종목 선택</option>' +
-    names.map(n =>
-      `<option value="${esc(n)}">${esc(n)}</option>`
-    ).join('');
-
-  if (names.includes(old)) select.value = old;
-
-  const type = document.getElementById('chartType');
-  type.innerHTML = `
-    <option value="weight">최고 무게 (kg)</option>
-    <option value="reps">총 반복 횟수</option>
-    <option value="sets">총 세트 수</option>`;
-
-  document.getElementById('exerciseStats').innerHTML =
-    names.length ? names.map(name => {
-      const logs = data.logs.filter(l => l.name === name);
-      const best = Math.max(...logs.flatMap(l =>
-        l.sets.map(s => s.weight)
-      ));
-
-      return `
-        <div class="item">
-          <div>
-            <strong>${esc(name)}</strong>
-            <small>${logs.length}회 운동 기록 · 최고 ${best}kg</small>
-          </div>
-        </div>`;
-    }).join('') :
-    '<div class="empty">운동 기록이 쌓이면 표시돼.</div>';
-
-  drawStats();
-}
-
-// 그래프
-function drawStats() {
-  const canvas = document.getElementById('chart');
-  const ctx = canvas.getContext('2d');
-  const name = document.getElementById('chartExercise').value;
-  const type = document.getElementById('chartType').value;
-
-  const logs = data.logs
-    .filter(l => l.name === name)
-    .sort((a,b) => a.date.localeCompare(b.date));
-
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  if (!logs.length) {
-    document.getElementById('chartInfo').textContent =
-      '운동 기록을 추가하면 그래프가 표시돼.';
-    return;
-  }
-
-  const points = logs.map(l => {
-    let value;
-    if (type === 'weight') {
-      value = Math.max(...l.sets.map(s => s.weight));
-    } else if (type === 'reps') {
-      value = l.sets.reduce((n,s) => n+s.reps,0);
-    } else {
-      value = l.sets.length;
-    }
-    return {date:l.date,value};
-  });
-
-  const max = Math.max(1,...points.map(p=>p.value))*1.2;
-  const left=48, right=580, top=22, bottom=258;
-
-  ctx.strokeStyle='#314258';
-  for(let i=0;i<=4;i++){
-    const y=bottom-(bottom-top)*i/4;
-    ctx.beginPath();
-    ctx.moveTo(left,y);
-    ctx.lineTo(right,y);
-    ctx.stroke();
-  }
-
-  const coords=points.map((p,i)=>({
-    x:points.length===1 ? 300 :
-      left+(right-left)*i/(points.length-1),
-    y:bottom-(bottom-top)*p.value/max
-  }));
-
-  ctx.strokeStyle='#43d6a0';
-  ctx.lineWidth=3;
-  ctx.beginPath();
-
-  coords.forEach((p,i) =>
-    i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y)
-  );
-  ctx.stroke();
-
-  coords.forEach((p,i)=>{
-    ctx.fillStyle='#43d6a0';
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,5,0,Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle='#f4f7fb';
-    ctx.font='11px Arial';
-    ctx.textAlign='center';
-    ctx.fillText(points[i].value,p.x,p.y-12);
-    ctx.fillText(points[i].date.slice(5),p.x,bottom+20);
-  });
-
-  document.getElementById('chartInfo').textContent =
-    `${points.length}회 기록 · 최근 ${points[points.length-1].value}` +
-    (type==='weight'?'kg':type==='reps'?'회':'세트');
-}
-
-// 기존 앱 화면 새로고침
-render();
-</script>
 </html>

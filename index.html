@@ -88,7 +88,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <button class="btn secondary small" onclick="backup()">백업</button>
 </header>
 
-<!-- 홈 -->
 <section id="home" class="page active">
   <h2>오늘의 운동</h2>
   <div class="cards">
@@ -101,7 +100,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <div id="recentLogs"></div>
 </section>
 
-<!-- 운동 계획 -->
 <section id="plan" class="page">
   <h2>요일별 운동 계획</h2>
   <p class="muted">매주 반복할 운동 종목을 요일별로 등록해 줘.</p>
@@ -109,7 +107,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <button class="btn full" onclick="openPlan()">＋ 운동 종목 추가</button>
 </section>
 
-<!-- 캘린더 -->
 <section id="calendar" class="page">
   <h2>운동 캘린더</h2>
   <div class="card">
@@ -127,10 +124,8 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <div id="dateDetails"></div>
 </section>
 
-<!-- 통계 -->
 <section id="stats" class="page">
   <h2>운동 성장 통계</h2>
-
   <div class="card">
     <h3 class="green">근력 운동 그래프</h3>
     <label>분석할 운동 종목</label>
@@ -144,7 +139,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
     <canvas id="strengthChart" width="600" height="300"></canvas>
     <div id="strengthChartInfo" class="chart-info">근력 운동 기록을 추가하면 그래프가 표시돼.</div>
   </div>
-
   <div class="card">
     <h3 class="blue">유산소 운동 그래프</h3>
     <label>분석할 운동 종목</label>
@@ -157,17 +151,14 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
     <canvas id="cardioChart" width="600" height="300"></canvas>
     <div id="cardioChartInfo" class="chart-info">유산소 운동 기록을 추가하면 그래프가 표시돼.</div>
   </div>
-
   <div class="card">
     <h3>근력 운동 기록</h3>
     <div id="strengthStats"></div>
   </div>
-
   <div class="card">
     <h3>유산소 운동 기록</h3>
     <div id="cardioStats"></div>
   </div>
-
   <div class="card">
     <h3>데이터 관리</h3>
     <p class="muted">기록을 파일로 저장하거나 이전 백업을 복원할 수 있어.</p>
@@ -184,7 +175,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <button data-page="stats" onclick="go('stats')"><b>▥</b>통계</button>
 </nav>
 
-<!-- 계획 입력 창 -->
 <dialog id="planDialog">
   <div class="close-row"><h3>운동 계획 등록</h3><button onclick="closeDialog('planDialog')">×</button></div>
   <label>운동할 요일</label>
@@ -220,7 +210,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   <button class="btn full" onclick="savePlan()">계획 저장</button>
 </dialog>
 
-<!-- 운동 기록 창 -->
 <dialog id="logDialog">
   <div class="close-row"><h3>실제 운동 기록</h3><button onclick="closeDialog('logDialog')">×</button></div>
   <label>운동 날짜</label>
@@ -232,7 +221,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
   </select>
   <label>운동 이름</label>
   <input id="logName" placeholder="운동 이름">
-
   <div id="strengthLogFields">
     <hr>
     <div class="section-title"><h3>세트별 기록</h3><button class="btn small secondary" onclick="addSet()">＋ 세트 추가</button></div>
@@ -241,7 +229,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
     </div>
     <div id="setRows"></div>
   </div>
-
   <div id="cardioLogFields" class="hidden">
     <hr>
     <label>단계 / 레벨</label>
@@ -250,7 +237,6 @@ hr{border:0;border-top:1px solid var(--line);margin:16px 0}
     <input id="cardioMinutes" type="number" min="1" step="1" placeholder="예: 20">
     <div class="notice">유산소 운동은 자동으로 1세트로 기록돼.</div>
   </div>
-
   <div id="strengthMinutesField">
     <label>운동 시간 (분, 선택)</label>
     <input id="logMinutes" type="number" min="0" value="0">
@@ -316,8 +302,7 @@ function savePlan(){
   if(!name){alert("운동 이름을 입력해 줘.");return;}
   const plan={
     id:makeId(),day:Number(document.getElementById("planDay").value),
-    name,part:document.getElementById("planPart").value,
-    type
+    name,part:document.getElementById("planPart").value,type
   };
   if(type==="strength"){
     plan.weight=Number(document.getElementById("planWeight").value);
@@ -377,12 +362,10 @@ function saveLog(){
   const date=document.getElementById("logDate").value;
   const type=document.getElementById("logType").value;
   if(!name||!date){alert("운동 이름과 날짜를 확인해 줘.");return;}
-
   const common={
     id:makeId(),name,date,type,
     note:document.getElementById("logNote").value.trim()
   };
-
   if(type==="cardio"){
     const level=Number(document.getElementById("cardioLevel").value);
     const minutes=Number(document.getElementById("cardioMinutes").value);
@@ -391,7 +374,7 @@ function saveLog(){
     }
     common.level=level;
     common.minutes=minutes;
-    common.sets=[{level,minutes}]; // 유산소는 항상 1세트
+    common.sets=[{level,minutes}];
   }else{
     const sets=[...document.querySelectorAll("#setRows .set-row")].map(r=>({
       weight:Number(r.children[1].value),
@@ -403,7 +386,6 @@ function saveLog(){
     common.sets=sets;
     common.minutes=Math.max(0,Number(document.getElementById("logMinutes").value)||0);
   }
-
   data.logs.push(common);
   selectedDate=date;
   closeDialog("logDialog");save();
@@ -420,7 +402,7 @@ function logCard(log){
   const cardio=getType(log)==="cardio";
   let detail;
   if(cardio){
-    detail=`레벨 ${Number(log.level??(log.sets?.[0]?.level)||0)} · ${Number(log.minutes)||0}분 · 1세트`;
+    detail=`레벨 ${Number(log.level ?? log.sets?.[0]?.level ?? 0)} · ${Number(log.minutes)||0}분 · 1세트`;
   }else{
     const sets=Array.isArray(log.sets)?log.sets:[];
     const details=sets.map((s,i)=>`${i+1}세트: ${s.weight}kg × ${s.reps}회`).join("<br>");
@@ -443,7 +425,6 @@ function renderHome(){
   const sets=logs.reduce((n,l)=>n+(getType(l)==="cardio"?1:(l.sets||[]).length),0);
   document.getElementById("totalSessions").textContent=logs.length+"종목";
   document.getElementById("totalSets").textContent=sets+"세트";
-
   const plans=data.plans.filter(p=>p.day===new Date().getDay());
   document.getElementById("todayPlan").innerHTML=plans.length?
     plans.map(p=>{
@@ -454,7 +435,6 @@ function renderHome(){
         <button class="btn small" onclick="openLog('${esc(p.name)}','${today}','${getType(p)}')">기록</button></div>`;
     }).join("")
     :'<div class="empty">오늘 예정된 운동이 없어.</div>';
-
   document.getElementById("recentLogs").innerHTML=logs.length?
     [...logs].reverse().map(logCard).join("")
     :'<div class="empty">오늘 운동 기록이 없어.</div>';
@@ -527,7 +507,6 @@ function renderStats(){
   const cardio=data.logs.filter(l=>getType(l)==="cardio");
   fillExerciseSelect("strengthExercise",strength);
   fillExerciseSelect("cardioExercise",cardio);
-
   const strengthNames=[...new Set(strength.map(l=>l.name))].sort();
   document.getElementById("strengthStats").innerHTML=strengthNames.length?
     strengthNames.map(name=>{
@@ -538,7 +517,6 @@ function renderStats(){
         <small>${logs.length}회 기록 · 최고 ${best}kg · ${count}세트</small></div></div>`;
     }).join("")
     :'<div class="empty">근력 운동 기록이 없어.</div>';
-
   const cardioNames=[...new Set(cardio.map(l=>l.name))].sort();
   document.getElementById("cardioStats").innerHTML=cardioNames.length?
     cardioNames.map(name=>{
@@ -549,7 +527,6 @@ function renderStats(){
         <small>${logs.length}회 기록 · 총 ${totalMinutes}분 · 최고 레벨 ${bestLevel}</small></div></div>`;
     }).join("")
     :'<div class="empty">유산소 운동 기록이 없어.</div>';
-
   drawStrengthStats();
   drawCardioStats();
 }
@@ -620,7 +597,7 @@ function drawCardioStats(){
   const points=logs.map(l=>({
     date:l.date,
     value:type==="minutes"?(Number(l.minutes)||0):
-      (Number(l.level??l.sets?.[0]?.level)||0)
+      (Number(l.level ?? l.sets?.[0]?.level ?? 0)||0)
   }));
   drawLineChart("cardioChart","cardioChartInfo",points,"#61a9ff",
     type==="minutes"?"분":"레벨");
